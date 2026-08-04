@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClipForge AI — Turn any video into viral clips</title>
+  <meta name="description" content="Paste a YouTube, Kick, Dropbox or Google Drive link and let ClipForge AI cut, caption, and export viral-ready clips in minutes." />
+
+  <!-- Fonts: Sora + Inter for the app chrome, plus the title/caption font families the user can pick from -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Bebas+Neue&family=Playfair+Display:ital@0;1&family=Montserrat:wght@500;700;800&family=Poppins:wght@500;700;800&family=Anton&family=Oswald:wght@500;700&family=League+Spartan:wght@600;800&family=Archivo+Black&family=Luckiest+Guy&family=Urbanist:wght@600;800&family=Rubik:wght@600;800&family=DM+Sans:wght@600;800&family=Outfit:wght@600;800&family=Manrope:wght@600;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Ambient background decoration (pure CSS, no JS cost) -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="blob blob-a"></span>
+    <span class="blob blob-b"></span>
+    <span class="blob blob-c"></span>
+    <span class="grid-overlay"></span>
+  </div>
+
+  <!-- ============================= HEADER ============================= -->
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+            <path d="M4 4l16 8-16 8V4z" fill="url(#brandGrad)"/>
+            <defs>
+              <linearGradient id="brandGrad" x1="4" y1="4" x2="20" y2="20">
+                <stop offset="0" stop-color="#8b7bff"/>
+                <stop offset="1" stop-color="#ff6ea9"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand-name">ClipForge<span class="brand-accent">AI</span></span>
+      </div>
+
+      <div class="navbar-status">
+        <span class="status-pill">
+          <span class="status-dot"></span>
+          AI Engine Online
+        </span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================= APP SHELL ============================= -->
+  <main class="app-shell">
+
+    <!-- Step indicator -->
+    <nav class="step-track" id="stepTrack" aria-label="Progress">
+      <div class="step is-active" data-step="1">
+        <span class="step-dot">1</span>
+        <span class="step-label">Configure</span>
+      </div>
+      <span class="step-line"></span>
+      <div class="step" data-step="2">
+        <span class="step-dot">2</span>
+        <span class="step-label">Processing</span>
+      </div>
+      <span class="step-line"></span>
+      <div class="step" data-step="3">
+        <span class="step-dot">3</span>
+        <span class="step-label">Results</span>
+      </div>
+    </nav>
+
+    <!-- ======================= SCREEN 1: CREATE / CONFIGURE ======================= -->
+    <section class="screen active" id="screen-create">
+
+      <div class="hero-copy">
+        <h1>Turn any video into <span class="grad-text">viral clips</span></h1>
+        <p>Paste a link, pick a caption style, and let the AI find the best moments for you.</p>
+      </div>
+
+      <!-- Card: Video URL -->
+      <div class="glass-card">
+        <label class="field-label" for="videoUrl">Video URL</label>
+        <div class="url-input-wrap">
+          <svg class="url-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
+            <path d="M9 12a3 3 0 003.6.5l3-3a3 3 0 00-4.24-4.24l-1.4 1.4M15 12a3 3 0 00-3.6-.5l-3 3a3 3 0 004.24 4.24l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          <input
+            type="text"
+            id="videoUrl"
+            class="url-input"
+            placeholder="Paste YouTube, Kick, Dropbox or Google Drive URL..."
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <!-- Detected-platform chip fades in once the URL matches a known source -->
+          <span class="detected-chip" id="detectedChip" aria-hidden="true"></span>
+        </div>
+        <div class="platform-badges" id="platformBadges">
+          <span class="badge" data-source="youtube">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FF3B3B" d="M23.5 6.2a3 3 0 00-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 00.5 6.2 31 31 0 000 12a31 31 0 00.5 5.8 3 3 0 002.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 002.1-2.1A31 31 0 0024 12a31 31 0 00-.5-5.8z"/><path fill="#0b0e14" d="M9.6 15.5V8.5L15.8 12z"/></svg>
+            YouTube
+          </span>
+          <span class="badge" data-source="kick">
+            <svg width="16" height="16" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#53FC18"/><path fill="#0b0e14" d="M5 6h3v4.2L11 6h3.6L11 11l3.8 7h-3.5l-2.5-5-1.3 1.6V18H5V6z"/></svg>
+            Kick
+          </span>
+          <span class="badge" data-source="dropbox">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#0061FF" d="M6 3l6 3.8L6 10.6.2 6.8 6 3zm12 0l5.8 3.8L18 10.6l-6-3.8L18 3zM6 11.4l6 3.8-6 3.8-5.8-3.8L6 11.4zm12 0l6 3.8-6 3.8-6-3.8 6-3.8zM12 16l6 3.8-6 3.6-6-3.6L12 16z"/></svg>
+            Dropbox
+          </span>
+          <span class="badge" data-source="gdrive-file">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFC107" d="M8.5 3h7l7.5 13-3.5 6h-15l-3.5-6z"/><path fill="#1976D2" d="M8.5 3l-7.5 13h7l7.5-13z"/><path fill="#4CAF50" d="M12.5 16l-3.5 6h15l-3.5-6z"/></svg>
+            Drive File
+          </span>
+          <span class="badge" data-source="gdrive-folder">
+            <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#FFCA28" d="M3 6a2 2 0 012-2h4l2 2h8a2 2 0 012 2v2H3z"/><path fill="#FFA000" d="M3 8h18v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            Drive Folder
+          </span>
+        </div>
+        <p class="field-hint" id="urlHint">We only read the public stream — nothing is uploaded until you click Create.</p>
+      </div>
+
+      <!-- Card: Clip Duration -->
+      <div class="glass-card">
+        <div class="field-label-row">
+          <label class="field-label" for="durationSlider">Clip Duration</label>
+          <span class="value-pill"><span id="durationValue">30</span> Seconds</span>
+        </div>
+        <input
+          type="range"
+          id="durationSlider"
+          class="slider"
+          min="10"
+          max="50"
+          step="1"
+          value="30"
+        />
+        <div class="slider-scale">
+          <span>10s</span>
+          <span>50s</span>
+        </div>
+      </div>
+
+      <!-- Progressive reveal group -->
+      <div class="reveal-group" id="revealGroup">
+
+        <!-- Card: Caption Style -->
+        <div class="glass-card">
+          <label class="field-label">Caption Style</label>
+          <div class="caption-grid" id="captionGrid" role="radiogroup" aria-label="Caption style">
+
+            <button class="caption-card is-selected" data-style="mrbeast" role="radio" aria-checked="true">
+              <div class="caption-preview preview-mrbeast">
+                <span class="cap-word">NO</span><span class="cap-word cap-hi">WAY</span>
+              </div>
+              <span class="caption-name">MrBeast Style</span>
+              <span class="caption-desc">Bold, yellow highlights, thick black stroke</span>
+            </button>
+
+            <button class="caption-card" data-style="wordbyword" role="radio" aria-checked="false">
+              <div class="caption-preview preview-wordbyword">
+                <span class="cap-cycle" data-words="THIS,CHANGES,EVERYTHING">THIS</span>
+              </div>
+              <span class="caption-name">Word By Word</span>
+              <span class="caption-desc">Every word pops in — built for TikTok &amp; Reels</span>
+            </button>
+
+            <button class="caption-card" data-style="clean" role="radio" aria-checked="false">
+              <div class="caption-preview preview-clean">
+                <span class="cap-line">Let's get into it.</span>
+              </div>
+              <span class="caption-name">Modern Clean</span>
+              <span class="caption-desc">Minimal white text with a soft shadow</span>
+            </button>
+
+            <button class="caption-card" data-style="gaming" role="radio" aria-checked="false">
+              <div class="caption-preview preview-gaming">
+                <span class="cap-line">CLUTCH!</span>
+              </div>
+              <span class="caption-name">Gaming Style</span>
+              <span class="caption-desc">Bold neon subtitles with a glow animation</span>
+            </button>
+
+            <button class="caption-card" data-style="cinema" role="radio" aria-checked="false">
+              <div class="caption-preview preview-cinema">
+                <span class="cap-line">Every story matters.</span>
+              </div>
+              <span class="caption-name">Cinema Style</span>
+              <span class="caption-desc">Elegant fades, large readable serif type</span>
+            </button>
+
+            <!-- New: Glow style -->
+            <button class="caption-card" data-style="glow" role="radio" aria-checked="false">
+              <div class="caption-preview preview-glow">
+                <span class="cap-cycle-glow" data-words="soft,glow,captions">soft</span>
+              </div>
+              <span class="caption-name">Glow Style</span>
+              <span class="caption-desc">Soft animated glow with smooth word fades</span>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- Card: Title Mode -->
+        <div class="glass-card">
+          <div class="title-mode-head">
+            <div>
+              <label class="field-label" for="titleModeToggle">Title Mode</label>
+              <p class="field-hint field-hint-tight" id="titleModeHint">Output stays vertical (9:16) with captions only.</p>
+            </div>
+            <button class="switch" id="titleModeToggle" role="switch" aria-checked="false" aria-labelledby="titleModeToggle">
+              <span class="switch-thumb"></span>
+            </button>
+          </div>
+
+          <div class="title-mode-panel" id="titleModePanel">
+            <div class="format-note">
+              <svg viewBox="0 0 24 24" width="14" height="14"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
+              Output format: <strong>1:1 Square</strong>
+            </div>
+
+            <!-- Illustrative layout diagram: title bar above a square video area -->
+            <div class="title-layout-mock" aria-hidden="true">
+              <div class="tlm-title-bar">TITLE</div>
+              <div class="tlm-video-area">
+                <svg viewBox="0 0 24 24" width="20" height="20"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              </div>
+            </div>
+
+            <div class="settings-row">
+              <div class="select-field">
+                <label class="field-label" for="titleToneSelect">Title Tone</label>
+                <div class="select-wrap">
+                  <select id="titleToneSelect">
+                    <option value="funny" selected>Funny Meme</option>
+                    <option value="informative">Informative</option>
+                    <option value="clickbait">Clickbait</option>
+                    <option value="motivational">Motivational</option>
+                    <option value="educational">Educational</option>
+                    <option value="storytelling">Storytelling</option>
+                    <option value="sarcastic">Sarcastic</option>
+                    <option value="emotional">Emotional</option>
+                  </select>
+                  <svg class="select-chevron" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+              </div>
+
+              <div class="select-field">
+                <span class="field-label">Emoji</span>
+                <button class="switch switch-inline" id="emojiToggle" role="switch" aria-checked="true">
+                  <span class="switch-thumb"></span>
+                </button>
+                <span class="switch-state" id="emojiState">Enabled</span>
+              </div>
+            </div>
+
+            <div class="generated-title-row">
+              <span class="generated-title" id="generatedTitle">"When bro thinks he's the main character 💀"</span>
+              <button class="icon-btn" id="regenerateTitleBtn" aria-label="Generate a new title">
+                <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 4v5h5M20 20v-5h-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Live Preview -->
+        <div class="glass-card">
+          <div class="field-label-row">
+            <label class="field-label">Live Preview</label>
+            <span class="value-pill value-pill-muted">Updates instantly</span>
+          </div>
+
+          <div class="live-preview-stage">
+            <div class="phone-mock" id="phoneMock">
+              <div class="phone-mock-titlebar" id="phoneMockTitleBar">TITLE</div>
+              <div class="phone-mock-video">
+                <div class="phone-mock-caption" id="phoneMockCaption">
+                  <span id="phoneMockCaptionText">Let's get into it.</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="preview-meta">
+              <span class="clip-meta-tag" id="previewDurationTag">30s</span>
+              <span class="clip-meta-tag" id="previewQualityTag">1080P</span>
+              <span class="clip-meta-tag" id="previewClipsTag">2 clips</span>
+              <span class="clip-meta-tag" id="previewFormatTag">9:16</span>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div class="select-field">
+              <label class="field-label" for="titleFontSelect">Title Font</label>
+              <div class="select-wrap">
+                <select id="titleFontSelect">
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Poppins" selected>Poppins</option>
+                  <option value="Anton">Anton</option>
+                  <option value="Bebas Neue">Bebas Neue</option>
+                  <option value="Oswald">Oswald</option>
+                  <option value="League Spartan">League Spartan</option>
+                  <option value="Archivo Black">Archivo Black</option>
+                  <option value="Luckiest Guy">Luckiest Guy</option>
+                  <option value="Inter">Inter</option>
+                  <option value="Urbanist">Urbanist</option>
+                  <option value="Rubik">Rubik</option>
+                  <option value="DM Sans">DM Sans</option>
+                  <option value="Outfit">Outfit</option>
+                  <option value="Sora">Sora</option>
+                  <option value="Manrope">Manrope</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+            <div class="select-field">
+              <label class="field-label" for="captionFontSelect">Caption Font</label>
+              <div class="select-wrap">
+                <select id="captionFontSelect">
+                  <option value="Inter" selected>Inter</option>
+                  <option value="Montserrat">Montserrat</option>
+                  <option value="Poppins">Poppins</option>
+                  <option value="Anton">Anton</option>
+                  <option value="Bebas Neue">Bebas Neue</option>
+                  <option value="Oswald">Oswald</option>
+                  <option value="League Spartan">League Spartan</option>
+                  <option value="Archivo Black">Archivo Black</option>
+                  <option value="Luckiest Guy">Luckiest Guy</option>
+                  <option value="Urbanist">Urbanist</option>
+                  <option value="Rubik">Rubik</option>
+                  <option value="DM Sans">DM Sans</option>
+                  <option value="Outfit">Outfit</option>
+                  <option value="Sora">Sora</option>
+                  <option value="Manrope">Manrope</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card: Output settings -->
+        <div class="glass-card">
+          <div class="settings-row">
+            <div class="select-field">
+              <label class="field-label" for="qualitySelect">Output Quality</label>
+              <div class="select-wrap">
+                <select id="qualitySelect">
+                  <option value="1080p" selected>1080P</option>
+                  <option value="720p">720P</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+
+            <div class="select-field">
+              <label class="field-label" for="clipsSelect">Number Of Clips</label>
+              <div class="select-wrap">
+                <select id="clipsSelect">
+                  <option value="1">1</option>
+                  <option value="2" selected>2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+                <svg class="select-chevron" viewBox="0 0 24 24" width="16" height="16"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Create button -->
+        <button class="create-btn" id="createBtn" disabled>
+          <span class="create-btn-label">Create Clips</span>
+          <svg class="create-btn-icon" viewBox="0 0 24 24" width="18" height="18"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- ======================= SCREEN 2: PROCESSING ======================= -->
+    <section class="screen" id="screen-processing">
+      <div class="glass-card processing-card">
+
+        <div class="processing-head">
+          <div class="loader-ring" aria-hidden="true">
+            <svg viewBox="0 0 80 80" width="72" height="72">
+              <circle class="ring-track" cx="40" cy="40" r="34" fill="none" stroke-width="6"/>
+              <circle class="ring-progress" id="ringProgress" cx="40" cy="40" r="34" fill="none" stroke-width="6" stroke-linecap="round"/>
+            </svg>
+            <span class="ring-percent" id="ringPercent">0%</span>
+          </div>
+          <h2>Creating your clips…</h2>
+          <p class="processing-sub">Estimated time remaining: <span id="etaValue">--</span></p>
+        </div>
+
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+
+        <ul class="stage-list" id="stageList">
+          <li class="stage" data-stage="download">
+            <span class="stage-icon"><span class="stage-dot"></span></span>
+            <span class="stage-text">Downloading video</span>
+          </li>
+          <li class="stage" data-stage="detect">
+            <span class="stage-icon"><span class="stage-dot"></span></span>
+            <span class="stage-text">Detecting best moments</span>
+          </li>
+          <li class="stage" data-stage="captions">
+            <span class="stage-icon"><span class="stage-dot"></span></span>
+            <span class="stage-text">Generating AI captions</span>
+          </li>
+          <li class="stage" data-stage="render">
+            <span class="stage-icon"><span class="stage-dot"></span></span>
+            <span class="stage-text">Rendering clips</span>
+          </li>
+          <li class="stage" data-stage="finalize">
+            <span class="stage-icon"><span class="stage-dot"></span></span>
+            <span class="stage-text">Finalizing export</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ======================= SCREEN 3: RESULTS ======================= -->
+    <section class="screen" id="screen-results">
+      <div class="results-head">
+        <h2>Your clips are ready</h2>
+        <p>Different highlight, same source video — no two clips overlap.</p>
+      </div>
+
+      <div class="clip-grid" id="clipGrid"><!-- injected by js/results.js --></div>
+
+      <button class="secondary-btn" id="createMoreBtn">
+        <svg viewBox="0 0 24 24" width="16" height="16"><path d="M4 12a8 8 0 0114-5.3M20 12a8 8 0 01-14 5.3M4 4v5h5M20 20v-5h-5" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Create more clips
+      </button>
+    </section>
+
+  </main>
+
+  <!-- ============================= FOOTER: NEED HELP ============================= -->
+  <footer class="help-footer">
+    <div class="help-card glass-card">
+      <div class="help-heading">
+        <h3>Need Help?</h3>
+        <p>We usually reply within a few hours.</p>
+      </div>
+      <div class="help-links">
+        <a class="help-link" href="https://t.me/kshitijM1" target="_blank" rel="noopener noreferrer">
+          <span class="help-icon help-icon-telegram" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><path d="M21.9 4.3L2.7 11.7c-1.2.5-1.2 1.2-.2 1.5l4.9 1.5 1.9 5.8c.2.6.4.8.9.8s.7-.2 1-.5l2.4-2.3 5 3.6c.9.5 1.5.3 1.8-.8L23.9 5.7c.4-1.3-.5-1.9-1.9-1.4z" fill="currentColor"/></svg>
+          </span>
+          <span class="help-text">
+            <span class="help-label">Telegram</span>
+            <span class="help-value">@kshitijM1</span>
+          </span>
+        </a>
+
+        <a class="help-link" href="https://www.instagram.com/goatz09/" target="_blank" rel="noopener noreferrer">
+          <span class="help-icon help-icon-instagram" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.7"/><circle cx="17.3" cy="6.7" r="1.1" fill="currentColor"/></svg>
+          </span>
+          <span class="help-text">
+            <span class="help-label">Instagram</span>
+            <span class="help-value">@goatz09</span>
+          </span>
+        </a>
+
+        <a class="help-link" href="mailto:lazydatat@gmail.com">
+          <span class="help-icon help-icon-mail" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="M3.5 6.5L12 13l8.5-6.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="help-text">
+            <span class="help-label">Gmail</span>
+            <span class="help-value">lazydatat@gmail.com</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Toast notifications -->
+  <div class="toast-stack" id="toastStack" aria-live="polite"></div>
+
+  <!-- ============================= SCRIPTS =============================
+       Loaded as plain, non-module scripts (not type="module") so the app
+       still runs when index.html is opened directly from disk — ES module
+       scripts are blocked by CORS under the file:// protocol in most
+       browsers. Each file attaches its piece of functionality to the single
+       shared `App` namespace defined in utils.js, in dependency order. -->
+  <script src="js/utils.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/fonts.js"></script>
+  <script src="js/sources.js"></script>
+  <script src="js/captionStyles.js"></script>
+  <script src="js/titleMode.js"></script>
+  <script src="js/preview.js"></script>
+  <script src="js/videoPlayer.js"></script>
+  <script src="js/pipeline.js"></script>
+  <script src="js/results.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
