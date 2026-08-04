@@ -95,7 +95,7 @@ App.constants = {
   // Where the Python backend (see /backend in this delivery) is running.
   // Change this if you deploy the backend somewhere other than your own
   // machine.
-  API_BASE_URL: 'http://localhost:5000',
+  API_BASE_URL: 'https://kmclips-backend.onrender.com',
 
   CAPTION_STYLE_LABELS: {
     mrbeast: 'MrBeast Style',
